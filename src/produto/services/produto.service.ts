@@ -2,20 +2,20 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Produto } from '../entities/produto.entity';
-// import { CategoriaService } from 'src/categoria/services/categoria.service';
+import { CategoriaService } from 'src/categoria/services/categoria.service';
 
 @Injectable()
 export class ProdutoService {
   constructor(
     @InjectRepository(Produto)
     private produtoRepository: Repository<Produto>,
-    // private categoriaService: CategoriaService,
+    private categoriaService: CategoriaService,
   ) {}
 
   async findAll(): Promise<Produto[]> {
     return await this.produtoRepository.find({
       relations: {
-        // categoria: true,
+        categoria: true,
       },
     });
   }
@@ -27,7 +27,7 @@ export class ProdutoService {
         id,
       },
       relations: {
-        // categoria: true,
+        categoria: true,
       },
     });
     // select * from tb_produto where id = 1
@@ -45,14 +45,14 @@ export class ProdutoService {
         titulo: ILike(`%${titulo}%`),
       },
       relations: {
-        // categoria: true,
+        categoria: true,
       },
     });
   }
 
   // insert into tb_produtos(titulo, texto) values ('titulo que eu mandar', 'texto que eu mandar');
   async create(produto: Produto): Promise<Produto> {
-    // await this.categoriaService.findById(produto.categoria.id);
+    await this.categoriaService.findById(produto.categoria.id);
 
     return await this.produtoRepository.save(produto);
   }
@@ -61,7 +61,7 @@ export class ProdutoService {
   async update(produto: Produto): Promise<Produto> {
     await this.findById(produto.id);
 
-    // await this.categoriaService.findById(produto.categoria.id);
+    await this.categoriaService.findById(produto.categoria.id);
 
     return await this.produtoRepository.save(produto);
   }
