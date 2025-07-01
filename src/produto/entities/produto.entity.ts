@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-// import { Categoria } from 'src/categoria/entities/categoria.entity';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 import {
   Column,
   Entity,
@@ -25,9 +25,8 @@ export class Produto {
   @Column({ type: 'decimal', precision: 8, scale: 2, nullable: false })
   preco: number;
 
-  // falta fazer essa configuração
-  // @ManyToOne(() => Categoria, (Categoria) => Categoria.produto, {
-  //   onDelete: 'CASCADE',
-  // })
-  // categoria: Categoria;
+  @ManyToOne(() => Categoria, (Categoria) => Categoria.produto, {
+    onDelete: 'CASCADE',
+  })
+  categoria: Categoria;
 }
